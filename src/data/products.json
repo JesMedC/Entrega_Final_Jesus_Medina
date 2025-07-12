@@ -1,0 +1,15 @@
+[
+  {
+    "id": "1752291484724",
+    "title": "teclado",
+    "description": "apple",
+    "code": "01012mmm",
+    "price": 12302,
+    "status": true,
+    "stock": 24,
+    "category": "tecnologia",
+    "thumbnails": [
+      "debe ser una imagen"
+    ]
+  }
+]

@@ -1,0 +1,70 @@
+<h1>Lista en Tiempo Real</h1>
+
+<form id="addForm" enctype="multipart/form-data" method="POST" action="/api/products">
+  <input name="title" placeholder="Título" required>
+  <input name="description" placeholder="Descripción" required>
+  <input name="code" placeholder="Código" required>
+  <input name="price" placeholder="Precio" type="number" required>
+  <input name="stock" placeholder="Stock" type="number" required>
+  <input name="category" placeholder="Categoría" required>
+
+  <select name="status">
+    <option value="">¿Activo?</option>
+    <option value="true">Sí</option>
+    <option value="false">No</option>
+  </select>
+
+  <input type="file" name="thumbnail" accept="image/*">
+
+  <button type="submit">Agregar Producto</button>
+</form>
+
+<div id="productList">
+  {{#each products}}
+    <div class="product-card" data-id="{{id}}">
+      {{#if thumbnails.[0]}}
+        <img src="{{thumbnails.[0]}}" alt="imagen de {{title}}">
+      {{/if}}
+      <h3>{{title}}</h3>
+      <p><strong>Precio:</strong> ${{price}}</p>
+      <p><strong>Stock:</strong> {{stock}}</p>
+      <p><strong>Categoría:</strong> {{category}}</p>
+      <p><strong>Descripción:</strong> {{description}}</p>
+      <button class="deleteBtn">Eliminar</button>
+    </div>
+  {{/each}}
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const socket = io();
+
+socket.on('productListUpdated', products => {
+  const container = document.getElementById('productList');
+  container.innerHTML = '';
+  products.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.dataset.id = p.id;
+
+    card.innerHTML = `
+      ${p.thumbnails?.[0] ? `<img src="${p.thumbnails[0]}" alt="img">` : ''}
+      <h3>${p.title}</h3>
+      <p><strong>Precio:</strong> $${p.price}</p>
+      <p><strong>Stock:</strong> ${p.stock}</p>
+      <p><strong>Categoría:</strong> ${p.category}</p>
+      <p><strong>Descripción:</strong> ${p.description}</p>
+      <button class="deleteBtn">Eliminar</button>
+    `;
+    container.appendChild(card);
+  });
+});
+
+document.getElementById('productList').addEventListener('click', async e => {
+  if (e.target.classList.contains('deleteBtn')) {
+    const card = e.target.closest('.product-card');
+    const id = card.dataset.id;
+    await fetch(`/api/products/${id}`, { method: 'DELETE' });
+  }
+});
+</script>
