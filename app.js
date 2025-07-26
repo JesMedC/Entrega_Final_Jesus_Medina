@@ -28,7 +28,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '/src/public')));
 
 // Handlebars setup
-app.engine('handlebars', engine());
+app.engine('handlebars', engine({
+  defaultLayout: 'main',
+  layoutsDir: path.join(__dirname, '/src/views/layouts')
+}));
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, '/src/views'));
 
