@@ -22,8 +22,23 @@ export default (productManager, io) => {
   const router = Router();
 
   router.get('/', async (req, res) => {
-    const products = await productManager.getAll();
-    res.json(products);
+    const { limit, page, sort, query } = req.query;
+    const products = await productManager.getAll({ limit, page, sort, query });
+
+    const response = {
+      status: 'success',
+      payload: products.docs,
+      totalPages: products.totalPages,
+      prevPage: products.prevPage,
+      nextPage: products.nextPage,
+      page: products.page,
+      hasPrevPage: products.hasPrevPage,
+      hasNextPage: products.hasNextPage,
+      prevLink: products.hasPrevPage ? `/api/products?page=${products.prevPage}` : null,
+      nextLink: products.hasNextPage ? `/api/products?page=${products.nextPage}` : null,
+    };
+
+    res.json(response);
   });
 
   router.get('/:pid', async (req, res) => {
@@ -48,13 +63,13 @@ export default (productManager, io) => {
     };
 
     const newProduct = await productManager.addProduct(product);
-    io.emit('productListUpdated', await productManager.getAll());
+    io.emit('productListUpdated', await productManager.getAll({}));
     res.redirect('/realtimeproducts');
   });
 
   router.delete('/:pid', async (req, res) => {
     await productManager.deleteProduct(req.params.pid);
-    io.emit('productListUpdated', await productManager.getAll());
+    io.emit('productListUpdated', await productManager.getAll({}));
     res.sendStatus(204);
   });
 

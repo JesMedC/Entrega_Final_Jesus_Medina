@@ -1,36 +1,40 @@
-import fs from 'fs/promises';
+import Product from '../models/product.model.js';
 
 export default class ProductManager {
-  constructor(path) {
-    this.path = path;
-  }
+  async getAll(params) {
+    const { limit = 10, page = 1, sort, query } = params;
+    const options = {
+      page: parseInt(page, 10),
+      limit: parseInt(limit, 10),
+      lean: true,
+    };
 
-  async getAll() {
-    try {
-      const data = await fs.readFile(this.path, 'utf-8');
-      return JSON.parse(data) || [];
-    } catch {
-      return [];
+    if (sort) {
+      options.sort = { price: sort === 'asc' ? 1 : -1 };
     }
+
+    const queryOptions = {};
+    if (query) {
+      queryOptions.category = query;
+    }
+
+    const products = await Product.paginate(queryOptions, options);
+    return products;
   }
 
   async getById(id) {
-    const products = await this.getAll();
-    return products.find(p => p.id === id);
+    return await Product.findById(id).lean();
   }
 
   async addProduct(product) {
-    const products = await this.getAll();
-    const id = Date.now().toString();
-    const newProduct = { id, ...product };
-    products.push(newProduct);
-    await fs.writeFile(this.path, JSON.stringify(products, null, 2));
-    return newProduct;
+    return await Product.create(product);
   }
 
   async deleteProduct(id) {
-    let products = await this.getAll();
-    products = products.filter(p => p.id !== id);
-    await fs.writeFile(this.path, JSON.stringify(products, null, 2));
+    return await Product.findByIdAndDelete(id);
+  }
+
+  async updateProduct(id, product) {
+    return await Product.findByIdAndUpdate(id, product, { new: true });
   }
 }
