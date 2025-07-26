@@ -97,4 +97,26 @@ body {
   .product-card button:hover {
     background-color: #cc0000;
   }
-  
+
+  /* Estilos para el botón "Agregar Nuevo Producto" */
+  .add-product-button-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .button {
+    display: inline-block;
+    background-color: #28a745; /* Un verde agradable */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .button:hover {
+    background-color: #218838; /* Un verde más oscuro al pasar el ratón */
+  }
