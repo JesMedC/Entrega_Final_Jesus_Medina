@@ -33,9 +33,9 @@ app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, '/src/views'));
 
 // Rutas
-app.use('/api/products', productsRouter(productManager, io));
-app.use('/api/carts', cartsRouter(cartManager));
-app.use('/', viewsRouter(productManager, cartManager));
+app.use('/api/products', productsRouter(productManager, io, express));
+app.use('/api/carts', cartsRouter(cartManager, express));
+app.use('/', viewsRouter(productManager, cartManager, express));
 
 // Socket.io
 io.on('connection', socket => {

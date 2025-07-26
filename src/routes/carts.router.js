@@ -1,7 +1,7 @@
-import { Router } from 'express';
 
-export default (cartManager) => {
-  const router = Router();
+
+export default (cartManager, express) => {
+  const router = express.Router();
 
   router.post('/', async (req, res) => {
     const cart = await cartManager.createCart();

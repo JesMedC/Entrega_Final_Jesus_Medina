@@ -1,4 +1,4 @@
-import { Router } from 'express';
+
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -18,8 +18,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-export default (productManager, io) => {
-  const router = Router();
+export default (productManager, io, express) => {
+  const router = express.Router();
 
   router.get('/', async (req, res) => {
     const { limit, page, sort, query } = req.query;
