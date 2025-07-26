@@ -1,9 +1,5 @@
 import { Router } from 'express';
-import ProductManager from '../managers/ProductManager.js';
-import CartManager from '../managers/CartManager.js';
-
-const productManager = new ProductManager();
-const cartManager = new CartManager();
+import { Router } from 'express';
 
 const router = Router();
 
@@ -36,4 +32,4 @@ router.get('/carts/:cid', async (req, res) => {
   res.render('cart', { cart });
 });
 
-export default () => router;
+export default (productManager, cartManager) => {
