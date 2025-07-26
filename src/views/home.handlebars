@@ -1,11 +1,15 @@
 <h1>Lista de Productos</h1>
 
+<div class="add-product-button-container">
+  <a href="/realtimeproducts" class="button">Agregar Nuevo Producto</a>
+</div>
+
 <div id="productList">
   {{#each products}}
     <div class="product-card">
       {{#if thumbnails.[0]}}
         <img src="{{thumbnails.[0]}}" alt="imagen de {{title}}">
-      {{/if}}
+      {{/if}
       <h3><a href="/products/{{this._id}}">{{title}}</a></h3>
       <p><strong>Precio:</strong> ${{price}}</p>
       <p><strong>Stock:</strong> {{stock}}</p>
